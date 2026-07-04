@@ -79,3 +79,10 @@ BundleArtifacts/
 *.tmp
 *.temp
 ~$*
+
+## Local / IDE artifacts
+Backup/
+UpgradeLog.htm
+msbuild.binlog
+xaml-out.txt
+Untitled
