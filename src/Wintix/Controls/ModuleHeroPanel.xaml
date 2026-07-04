@@ -1,0 +1,76 @@
+<UserControl
+    x:Class="Wintix.Controls.ModuleHeroPanel"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="using:Wintix.Converters">
+
+    <UserControl.Resources>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+    </UserControl.Resources>
+
+    <Border Style="{StaticResource WintixHeroPanelStyle}">
+        <Grid ColumnSpacing="20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Spacing="10">
+                <StackPanel Orientation="Horizontal" Spacing="10">
+                    <Border
+                        Width="42"
+                        Height="42"
+                        Background="{StaticResource WintixAccentMutedBrush}"
+                        BorderBrush="{StaticResource WintixAccentBrush}"
+                        BorderThickness="1"
+                        CornerRadius="12">
+                        <FontIcon
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets"
+                            FontSize="18"
+                            Foreground="{StaticResource WintixAccentBrush}"
+                            Glyph="{x:Bind IconGlyph, Mode=OneWay}" />
+                    </Border>
+                    <StackPanel VerticalAlignment="Center" Spacing="2">
+                        <TextBlock Style="{StaticResource WintixPageTitleStyle}" Text="{x:Bind Title, Mode=OneWay}" />
+                        <TextBlock
+                            MaxWidth="640"
+                            Style="{StaticResource WintixSubtitleStyle}"
+                            FontSize="13"
+                            Text="{x:Bind Subtitle, Mode=OneWay}" />
+                    </StackPanel>
+                </StackPanel>
+
+                <TextBlock
+                    Style="{StaticResource WintixMetricLargeStyle}"
+                    Foreground="{StaticResource WintixAccentBrush}"
+                    Text="{x:Bind MetricValue, Mode=OneWay}" />
+                <TextBlock Style="{StaticResource WintixLabelStyle}" Text="{x:Bind MetricLabel, Mode=OneWay}" />
+                <TextBlock
+                    MaxWidth="720"
+                    Style="{StaticResource WintixSubtitleStyle}"
+                    FontSize="13"
+                    Text="{x:Bind StatusText, Mode=OneWay}" />
+            </StackPanel>
+
+            <StackPanel
+                Grid.Column="1"
+                VerticalAlignment="Center"
+                Spacing="10">
+                <Button
+                    x:Name="PrimaryActionButton"
+                    Click="PrimaryActionButton_Click"
+                    Content="{x:Bind PrimaryActionText, Mode=OneWay}"
+                    Style="{StaticResource WintixPrimaryButtonStyle}"
+                    Visibility="{x:Bind ShowPrimaryAction, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+                <Button
+                    x:Name="SecondaryActionButton"
+                    Click="SecondaryActionButton_Click"
+                    Content="{x:Bind SecondaryActionText, Mode=OneWay}"
+                    Style="{StaticResource WintixGhostButtonStyle}"
+                    Visibility="{x:Bind ShowSecondaryAction, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+            </StackPanel>
+        </Grid>
+    </Border>
+</UserControl>

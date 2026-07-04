@@ -18,7 +18,7 @@ Wintix helps you discover events, manage tickets, and check in — with a modern
 | Windows | 10 1809+ (19041+ recommended) |
 | [.NET SDK](https://dotnet.microsoft.com/download) | 8.0+ |
 | [Visual Studio 2022](https://visualstudio.microsoft.com/) | 17.8+ with **WinUI / Windows App SDK** workload |
-| Windows App SDK | 1.6+ (restored via NuGet) |
+| Windows App SDK | 1.6+ (bundled via self-contained deployment) |
 
 ## Getting started
 
@@ -42,9 +42,19 @@ cd wintix
 
 ```bash
 dotnet restore Wintix.sln
-dotnet build Wintix.sln -c Debug
+dotnet build Wintix.sln -c Debug -r win-x64
 dotnet run --project src/Wintix/Wintix.csproj
 ```
+
+The app is configured as a **self-contained win-x64** deployment. The Windows App SDK and .NET runtimes are bundled with the app — end users do not need to install the Windows App Runtime separately.
+
+**Publish for distribution**
+
+```bash
+dotnet publish src/Wintix/Wintix.csproj -c Release -r win-x64
+```
+
+Ship the contents of `src/Wintix/bin/Release/net8.0-windows10.0.19041.0/win-x64/publish/` (zip the folder or copy it as-is).
 
 ### Install workloads (if needed)
 

@@ -1,0 +1,65 @@
+<UserControl
+    x:Class="Wintix.Controls.StatCard"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="using:Wintix.Converters">
+
+    <UserControl.Resources>
+        <converters:HexToBrushConverter x:Key="HexToBrushConverter" />
+    </UserControl.Resources>
+
+    <Border
+        x:Name="CardBorder"
+        MinHeight="128"
+        Background="#121A28"
+        BorderBrush="{StaticResource WintixBorderSubtleBrush}"
+        BorderThickness="1"
+        CornerRadius="16"
+        PointerEntered="CardBorder_PointerEntered"
+        PointerExited="CardBorder_PointerExited">
+        <Grid>
+            <Border
+                Margin="1"
+                Background="{StaticResource WintixCardGlowGradientBrush}"
+                CornerRadius="15"
+                Opacity="0.55" />
+            <Grid Padding="20">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <Border
+                    Grid.Row="0"
+                    Width="40"
+                    Height="40"
+                    HorizontalAlignment="Left"
+                    Background="{x:Bind AccentColorHex, Mode=OneWay, Converter={StaticResource HexToBrushConverter}}"
+                    CornerRadius="11"
+                    Opacity="0.18">
+                    <FontIcon
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets"
+                        FontSize="17"
+                        Foreground="{x:Bind AccentColorHex, Mode=OneWay, Converter={StaticResource HexToBrushConverter}}"
+                        Glyph="{x:Bind IconGlyph, Mode=OneWay}" />
+                </Border>
+
+                <TextBlock
+                    Grid.Row="1"
+                    Margin="0,16,0,0"
+                    VerticalAlignment="Bottom"
+                    Style="{StaticResource WintixMetricValueStyle}"
+                    Text="{x:Bind Value, Mode=OneWay}" />
+
+                <TextBlock
+                    Grid.Row="2"
+                    Margin="0,8,0,0"
+                    Style="{StaticResource WintixLabelStyle}"
+                    Text="{x:Bind Label, Mode=OneWay}" />
+            </Grid>
+        </Grid>
+    </Border>
+</UserControl>

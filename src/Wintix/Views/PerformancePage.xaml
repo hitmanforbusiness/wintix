@@ -1,0 +1,101 @@
+<Page
+    x:Class="Wintix.Views.PerformancePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:Wintix.Controls"
+    xmlns:converters="using:Wintix.Converters"
+    xmlns:models="using:Wintix.Models"
+    Background="{StaticResource WintixBackgroundBrush}">
+
+    <Page.Resources>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+    </Page.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Padding="28,24,28,32" Spacing="22">
+            <controls:SectionHeader
+                x:Name="PageHeader"
+                ActionText="{x:Bind ViewModel.RefreshActionText, Mode=OneWay}"
+                ShowAction="True"
+                Subtitle="{x:Bind ViewModel.PageSubtitle, Mode=OneWay}"
+                Title="{x:Bind ViewModel.PageTitle, Mode=OneWay}" />
+
+            <Border Style="{StaticResource WintixHeroPanelStyle}">
+                <Grid ColumnSpacing="24">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Spacing="10">
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <Border
+                                Width="42"
+                                Height="42"
+                                Background="{StaticResource WintixAccentMutedBrush}"
+                                BorderBrush="{StaticResource WintixAccentBrush}"
+                                BorderThickness="1"
+                                CornerRadius="12">
+                                <FontIcon
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets"
+                                    FontSize="18"
+                                    Foreground="{StaticResource WintixRamBrush}"
+                                    Glyph="&#xE964;" />
+                            </Border>
+                            <TextBlock VerticalAlignment="Center" Style="{StaticResource WintixLabelStyle}" Text="{x:Bind ViewModel.MemoryLoadLabel, Mode=OneWay}" />
+                        </StackPanel>
+                        <TextBlock Foreground="{StaticResource WintixRamBrush}" Style="{StaticResource WintixMetricLargeStyle}" Text="{x:Bind ViewModel.MemoryLoadDisplay, Mode=OneWay}" />
+                        <TextBlock Style="{StaticResource WintixSubtitleStyle}" Text="{x:Bind ViewModel.MemorySummary, Mode=OneWay}" />
+                        <TextBlock Style="{StaticResource WintixSubtitleStyle}" FontSize="13" Text="{x:Bind ViewModel.StatusMessage, Mode=OneWay}" />
+                    </StackPanel>
+                    <Button
+                        Grid.Column="1"
+                        VerticalAlignment="Center"
+                        Command="{x:Bind ViewModel.ToggleMonitoringCommand}"
+                        Content="{x:Bind ViewModel.MonitorButtonText, Mode=OneWay}"
+                        Style="{StaticResource WintixPrimaryButtonStyle}" />
+                </Grid>
+            </Border>
+
+            <TextBlock Style="{StaticResource WintixSectionTitleStyle}" Text="{x:Bind ViewModel.ProcessesTitle, Mode=OneWay}" />
+
+            <ItemsRepeater ItemsSource="{x:Bind ViewModel.Processes, Mode=OneWay}">
+                <ItemsRepeater.ItemTemplate>
+                    <DataTemplate x:DataType="models:ProcessInfoItem">
+                        <Border Style="{StaticResource WintixListRowCardStyle}">
+                            <Grid ColumnSpacing="14">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="2*" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Spacing="4">
+                                    <TextBlock FontSize="15" FontWeight="SemiBold" Text="{x:Bind Name}" />
+                                    <TextBlock Style="{StaticResource WintixCaptionStyle}" Text="{x:Bind Status}" />
+                                </StackPanel>
+                                <Border
+                                    Grid.Column="1"
+                                    Padding="10,6"
+                                    VerticalAlignment="Center"
+                                    Background="#1800D4FF"
+                                    BorderBrush="{StaticResource WintixAccentBrush}"
+                                    BorderThickness="1"
+                                    CornerRadius="8">
+                                    <TextBlock FontWeight="SemiBold" Foreground="{StaticResource WintixAccentBrush}" Text="{x:Bind FormattedMemory}" />
+                                </Border>
+                                <Button
+                                    Grid.Column="3"
+                                    Click="EndProcess_Click"
+                                    Content="{x:Bind ActionLabel, Mode=OneWay}"
+                                    Style="{StaticResource WintixGhostButtonStyle}"
+                                    Tag="{x:Bind}" />
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsRepeater.ItemTemplate>
+            </ItemsRepeater>
+        </StackPanel>
+    </ScrollViewer>
+</Page>

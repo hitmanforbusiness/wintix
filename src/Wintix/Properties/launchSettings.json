@@ -1,8 +1,5 @@
 {
   "profiles": {
-    "Wintix (Package)": {
-      "commandName": "MsixPackage"
-    },
     "Wintix (Unpackaged)": {
       "commandName": "Project"
     }

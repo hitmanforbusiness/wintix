@@ -1,0 +1,67 @@
+<Page
+    x:Class="Wintix.Views.StartupPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:Wintix.Controls"
+    xmlns:models="using:Wintix.Models"
+    Background="{StaticResource WintixBackgroundBrush}">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Padding="28,24,28,32" Spacing="22">
+            <controls:SectionHeader
+                x:Name="PageHeader"
+                ActionText="{x:Bind ViewModel.RefreshActionText, Mode=OneWay}"
+                ShowAction="True"
+                Subtitle="{x:Bind ViewModel.PageSubtitle, Mode=OneWay}"
+                Title="{x:Bind ViewModel.PageTitle, Mode=OneWay}" />
+
+            <Border Style="{StaticResource WintixGlassCardStyle}">
+                <TextBlock Style="{StaticResource WintixSubtitleStyle}" Text="{x:Bind ViewModel.StatusMessage, Mode=OneWay}" />
+            </Border>
+
+            <TextBlock Style="{StaticResource WintixSectionTitleStyle}" Text="{x:Bind ViewModel.EntriesTitle, Mode=OneWay}" />
+
+            <ItemsRepeater ItemsSource="{x:Bind ViewModel.Items, Mode=OneWay}">
+                <ItemsRepeater.ItemTemplate>
+                    <DataTemplate x:DataType="models:StartupItem">
+                        <Border Style="{StaticResource WintixListRowCardStyle}">
+                            <Grid ColumnSpacing="14">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Spacing="6">
+                                    <TextBlock FontSize="15" FontWeight="SemiBold" Text="{x:Bind Name}" />
+                                    <TextBlock
+                                        TextWrapping="WrapWholeWords"
+                                        Style="{StaticResource WintixSubtitleStyle}"
+                                        FontSize="12"
+                                        Text="{x:Bind Command}" />
+                                    <TextBlock Style="{StaticResource WintixCaptionStyle}" Text="{x:Bind Hive}" />
+                                </StackPanel>
+                                <Border
+                                    Grid.Column="1"
+                                    Padding="10,6"
+                                    VerticalAlignment="Center"
+                                    Background="#1522C55E"
+                                    BorderBrush="{StaticResource WintixSuccessBrush}"
+                                    BorderThickness="1"
+                                    CornerRadius="8">
+                                    <TextBlock Foreground="{StaticResource WintixSuccessBrush}" Text="{x:Bind EnabledLabel, Mode=OneWay}" />
+                                </Border>
+                                <Button
+                                    Grid.Column="2"
+                                    VerticalAlignment="Center"
+                                    Click="DisableStartup_Click"
+                                    Content="{x:Bind DisableLabel, Mode=OneWay}"
+                                    Style="{StaticResource WintixGhostButtonStyle}"
+                                    Tag="{x:Bind}" />
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsRepeater.ItemTemplate>
+            </ItemsRepeater>
+        </StackPanel>
+    </ScrollViewer>
+</Page>

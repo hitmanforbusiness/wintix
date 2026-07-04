@@ -1,0 +1,51 @@
+<UserControl
+    x:Class="Wintix.Controls.MetricBadge"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="using:Wintix.Converters">
+
+    <UserControl.Resources>
+        <converters:HexToBrushConverter x:Key="HexToBrushConverter" />
+    </UserControl.Resources>
+
+    <StackPanel
+        MinWidth="140"
+        HorizontalAlignment="Stretch"
+        Spacing="14">
+        <StackPanel Orientation="Horizontal" Spacing="10">
+            <FontIcon
+                FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets"
+                FontSize="18"
+                Foreground="{x:Bind AccentColorHex, Mode=OneWay, Converter={StaticResource HexToBrushConverter}}"
+                Glyph="{x:Bind IconGlyph, Mode=OneWay}" />
+            <TextBlock
+                VerticalAlignment="Center"
+                Style="{StaticResource WintixLabelStyle}"
+                Text="{x:Bind MetricName, Mode=OneWay}" />
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" Spacing="4">
+            <TextBlock
+                Style="{StaticResource WintixMetricLargeStyle}"
+                Foreground="{x:Bind AccentColorHex, Mode=OneWay, Converter={StaticResource HexToBrushConverter}}"
+                Text="{x:Bind Value, Mode=OneWay}" />
+            <TextBlock
+                Margin="0,12,0,0"
+                Style="{StaticResource WintixSubtitleStyle}"
+                FontSize="20"
+                FontWeight="SemiBold"
+                Text="{x:Bind Unit, Mode=OneWay}" />
+        </StackPanel>
+
+        <Grid Height="6">
+            <Border Background="#223041" CornerRadius="3" />
+            <ProgressBar
+                Maximum="100"
+                Value="{x:Bind Percentage, Mode=OneWay}"
+                Height="6"
+                Background="Transparent"
+                BorderThickness="0"
+                Foreground="{x:Bind AccentColorHex, Mode=OneWay, Converter={StaticResource HexToBrushConverter}}" />
+        </Grid>
+    </StackPanel>
+</UserControl>

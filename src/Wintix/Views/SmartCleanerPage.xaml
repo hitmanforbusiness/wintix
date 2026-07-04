@@ -1,0 +1,82 @@
+<Page
+    x:Class="Wintix.Views.SmartCleanerPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:Wintix.Controls"
+    xmlns:converters="using:Wintix.Converters"
+    xmlns:models="using:Wintix.Models"
+    Background="{StaticResource WintixBackgroundBrush}">
+
+    <Page.Resources>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+    </Page.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Padding="28,24,28,32" Spacing="22">
+            <controls:ModuleHeroPanel
+                x:Name="HeroPanel"
+                IconGlyph="&#xE74C;"
+                MetricLabel="{x:Bind ViewModel.MetricLabel, Mode=OneWay}"
+                MetricValue="{x:Bind ViewModel.TotalReclaimable, Mode=OneWay}"
+                PrimaryActionText="{x:Bind ViewModel.ScanActionText, Mode=OneWay}"
+                ShowSecondaryAction="False"
+                StatusText="{x:Bind ViewModel.StatusMessage, Mode=OneWay}"
+                Subtitle="{x:Bind ViewModel.PageSubtitle, Mode=OneWay}"
+                Title="{x:Bind ViewModel.PageTitle, Mode=OneWay}" />
+
+            <Grid ColumnSpacing="12">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Button
+                    Grid.Column="0"
+                    Command="{x:Bind ViewModel.CleanCommand}"
+                    Content="{x:Bind ViewModel.CleanButtonText, Mode=OneWay}"
+                    Style="{StaticResource WintixPrimaryButtonStyle}" />
+                <ProgressRing
+                    Grid.Column="1"
+                    Width="28"
+                    Height="28"
+                    IsActive="{x:Bind ViewModel.IsBusy, Mode=OneWay}"
+                    Visibility="{x:Bind ViewModel.IsBusy, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+            </Grid>
+
+            <TextBlock Style="{StaticResource WintixSectionTitleStyle}" Text="{x:Bind ViewModel.CategoriesTitle, Mode=OneWay}" />
+
+            <ItemsRepeater ItemsSource="{x:Bind ViewModel.Categories, Mode=OneWay}">
+                <ItemsRepeater.Layout>
+                    <UniformGridLayout MinColumnSpacing="14" MinItemWidth="360" MinRowSpacing="14" Orientation="Horizontal" />
+                </ItemsRepeater.Layout>
+                <ItemsRepeater.ItemTemplate>
+                    <DataTemplate x:DataType="models:CleanCategory">
+                        <Border Style="{StaticResource WintixListRowCardStyle}">
+                            <Grid ColumnSpacing="14">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <CheckBox VerticalAlignment="Center" IsChecked="{x:Bind IsSelected, Mode=TwoWay}" />
+                                <StackPanel Grid.Column="1" Spacing="6">
+                                    <TextBlock FontSize="15" FontWeight="SemiBold" Text="{x:Bind Name}" />
+                                    <TextBlock Style="{StaticResource WintixSubtitleStyle}" FontSize="12" Text="{x:Bind Description}" />
+                                </StackPanel>
+                                <Border
+                                    Grid.Column="2"
+                                    Padding="10,6"
+                                    VerticalAlignment="Center"
+                                    Background="#1800D4FF"
+                                    BorderBrush="{StaticResource WintixAccentBrush}"
+                                    BorderThickness="1"
+                                    CornerRadius="8">
+                                    <TextBlock FontWeight="SemiBold" Foreground="{StaticResource WintixAccentBrush}" Text="{x:Bind FormattedSize}" />
+                                </Border>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsRepeater.ItemTemplate>
+            </ItemsRepeater>
+        </StackPanel>
+    </ScrollViewer>
+</Page>

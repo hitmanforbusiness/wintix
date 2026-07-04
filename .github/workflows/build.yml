@@ -23,4 +23,4 @@ jobs:
         run: dotnet restore Wintix.sln
 
       - name: Build
-        run: dotnet build Wintix.sln -c Release --no-restore
+        run: dotnet build Wintix.sln -c Release -r win-x64 --no-restore

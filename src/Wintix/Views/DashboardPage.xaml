@@ -1,0 +1,386 @@
+<Page
+    x:Class="Wintix.Views.DashboardPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:Wintix.Controls"
+    xmlns:converters="using:Wintix.Converters"
+    xmlns:models="using:Wintix.Models"
+    Background="{StaticResource WintixBackgroundBrush}">
+
+    <Page.Resources>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+        <converters:HexToBrushConverter x:Key="HexToBrushConverter" />
+        <converters:InvertBoolConverter x:Key="InvertBoolConverter" />
+    </Page.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid
+            MaxWidth="1680"
+            Padding="24,20,24,28"
+            RowSpacing="22">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <!-- Header -->
+            <Grid Grid.Row="0" ColumnSpacing="20">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" MinWidth="280" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Spacing="6" VerticalAlignment="Center">
+                    <TextBlock FontSize="24" FontWeight="SemiBold" Text="{x:Bind ViewModel.PageTitle, Mode=OneWay}" />
+                    <TextBlock
+                        MaxWidth="560"
+                        FontSize="13"
+                        LineHeight="18"
+                        Foreground="{StaticResource WintixTextSecondaryBrush}"
+                        Text="{x:Bind ViewModel.PageSubtitle, Mode=OneWay}"
+                        TextWrapping="WrapWholeWords" />
+                </StackPanel>
+
+                <StackPanel
+                    Grid.Column="1"
+                    HorizontalAlignment="Right"
+                    Spacing="10"
+                    VerticalAlignment="Center">
+                    <StackPanel HorizontalAlignment="Right" Spacing="2">
+                        <TextBlock
+                            HorizontalAlignment="Right"
+                            FontSize="11"
+                            Foreground="{StaticResource WintixTextMutedBrush}"
+                            Text="{x:Bind ViewModel.LastScanLabel, Mode=OneWay}" />
+                        <TextBlock
+                            HorizontalAlignment="Right"
+                            FontSize="12"
+                            Foreground="{StaticResource WintixTextSecondaryBrush}"
+                            Text="{x:Bind ViewModel.LastScanTime, Mode=OneWay}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <Button
+                            Click="DeepScanButton_Click"
+                            Content="{x:Bind ViewModel.DeepScanText, Mode=OneWay}"
+                            IsEnabled="{x:Bind ViewModel.IsScanning, Mode=OneWay, Converter={StaticResource InvertBoolConverter}}"
+                            Style="{StaticResource WintixGhostButtonStyle}" />
+                        <Button
+                            Click="QuickScanButton_Click"
+                            Content="{x:Bind ViewModel.QuickScanText, Mode=OneWay}"
+                            IsEnabled="{x:Bind ViewModel.IsScanning, Mode=OneWay, Converter={StaticResource InvertBoolConverter}}"
+                            Style="{StaticResource WintixPrimaryButtonStyle}" />
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+
+            <!-- Health + compact metrics -->
+            <Grid Grid.Row="1" ColumnSpacing="16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="320" MinWidth="280" />
+                    <ColumnDefinition Width="*" MinWidth="420" />
+                </Grid.ColumnDefinitions>
+
+                <controls:HealthScoreCard
+                    Label="{x:Bind ViewModel.HealthScoreLabel, Mode=OneWay}"
+                    Score="{x:Bind ViewModel.HealthScore, Mode=OneWay}"
+                    ScoreValue="{x:Bind ViewModel.HealthScoreValue, Mode=OneWay}"
+                    StatusText="{x:Bind ViewModel.HealthStatus, Mode=OneWay}"
+                    Summary="{x:Bind ViewModel.LastScanSummary, Mode=OneWay}" />
+
+                <Grid Grid.Column="1" ColumnSpacing="12" RowSpacing="12">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <controls:CompactMetricCard
+                        AccentColorHex="{x:Bind ViewModel.CpuMetric.AccentColorHex, Mode=OneWay}"
+                        Description="{x:Bind ViewModel.CpuMetric.Description, Mode=OneWay}"
+                        DetailText="{x:Bind ViewModel.CpuMetric.DetailText, Mode=OneWay}"
+                        IconGlyph="{x:Bind ViewModel.CpuMetric.IconGlyph, Mode=OneWay}"
+                        MetricName="{x:Bind ViewModel.CpuMetric.Name, Mode=OneWay}"
+                        Percentage="{x:Bind ViewModel.CpuMetric.Percentage, Mode=OneWay}"
+                        Sparkline="{x:Bind ViewModel.CpuMetric.Sparkline, Mode=OneWay}"
+                        Unit="{x:Bind ViewModel.CpuMetric.Unit, Mode=OneWay}"
+                        Value="{x:Bind ViewModel.CpuMetric.Value, Mode=OneWay}" />
+
+                    <controls:CompactMetricCard
+                        Grid.Column="1"
+                        AccentColorHex="{x:Bind ViewModel.RamMetric.AccentColorHex, Mode=OneWay}"
+                        Description="{x:Bind ViewModel.RamMetric.Description, Mode=OneWay}"
+                        DetailText="{x:Bind ViewModel.RamMetric.DetailText, Mode=OneWay}"
+                        IconGlyph="{x:Bind ViewModel.RamMetric.IconGlyph, Mode=OneWay}"
+                        MetricName="{x:Bind ViewModel.RamMetric.Name, Mode=OneWay}"
+                        Percentage="{x:Bind ViewModel.RamMetric.Percentage, Mode=OneWay}"
+                        Sparkline="{x:Bind ViewModel.RamMetric.Sparkline, Mode=OneWay}"
+                        Unit="{x:Bind ViewModel.RamMetric.Unit, Mode=OneWay}"
+                        Value="{x:Bind ViewModel.RamMetric.Value, Mode=OneWay}" />
+
+                    <controls:CompactMetricCard
+                        Grid.Row="1"
+                        AccentColorHex="{x:Bind ViewModel.DiskMetric.AccentColorHex, Mode=OneWay}"
+                        Description="{x:Bind ViewModel.DiskMetric.Description, Mode=OneWay}"
+                        DetailText="{x:Bind ViewModel.DiskMetric.DetailText, Mode=OneWay}"
+                        IconGlyph="{x:Bind ViewModel.DiskMetric.IconGlyph, Mode=OneWay}"
+                        MetricName="{x:Bind ViewModel.DiskMetric.Name, Mode=OneWay}"
+                        Percentage="{x:Bind ViewModel.DiskMetric.Percentage, Mode=OneWay}"
+                        Sparkline="{x:Bind ViewModel.DiskMetric.Sparkline, Mode=OneWay}"
+                        Unit="{x:Bind ViewModel.DiskMetric.Unit, Mode=OneWay}"
+                        Value="{x:Bind ViewModel.DiskMetric.Value, Mode=OneWay}" />
+
+                    <controls:CompactMetricCard
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        AccentColorHex="{x:Bind ViewModel.NetworkMetric.AccentColorHex, Mode=OneWay}"
+                        Description="{x:Bind ViewModel.NetworkMetric.Description, Mode=OneWay}"
+                        DetailText="{x:Bind ViewModel.NetworkMetric.DetailText, Mode=OneWay}"
+                        IconGlyph="{x:Bind ViewModel.NetworkMetric.IconGlyph, Mode=OneWay}"
+                        MetricName="{x:Bind ViewModel.NetworkMetric.Name, Mode=OneWay}"
+                        Percentage="{x:Bind ViewModel.NetworkMetric.Percentage, Mode=OneWay}"
+                        Sparkline="{x:Bind ViewModel.NetworkMetric.Sparkline, Mode=OneWay}"
+                        Unit="{x:Bind ViewModel.NetworkMetric.Unit, Mode=OneWay}"
+                        Value="{x:Bind ViewModel.NetworkMetric.Value, Mode=OneWay}" />
+                </Grid>
+            </Grid>
+
+            <!-- System Usage -->
+            <StackPanel Grid.Row="2" Spacing="12">
+                <TextBlock FontSize="15" FontWeight="SemiBold" Text="{x:Bind ViewModel.SystemUsageTitle, Mode=OneWay}" />
+
+                <Grid ColumnSpacing="12" RowSpacing="12">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <!-- CPU usage panel -->
+                    <Border Grid.Row="0" Grid.Column="0" Style="{StaticResource WintixUsageDetailPanelStyle}">
+                        <Grid RowSpacing="12">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Grid ColumnSpacing="8">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Spacing="2">
+                                    <TextBlock FontSize="12" Foreground="{StaticResource WintixTextMutedBrush}" Text="{x:Bind ViewModel.CpuMetric.Name, Mode=OneWay}" />
+                                    <TextBlock FontSize="13" Foreground="{StaticResource WintixTextSecondaryBrush}" Text="{x:Bind ViewModel.CpuMetric.Description, Mode=OneWay}" />
+                                </StackPanel>
+                                <TextBlock
+                                    Grid.Column="1"
+                                    VerticalAlignment="Center"
+                                    FontSize="22"
+                                    FontWeight="SemiBold"
+                                    Text="{x:Bind ViewModel.CpuMetric.Value, Mode=OneWay}" />
+                            </Grid>
+                            <controls:SparklineChart
+                                Grid.Row="1"
+                                Height="48"
+                                AccentColorHex="{x:Bind ViewModel.CpuMetric.AccentColorHex, Mode=OneWay}"
+                                Values="{x:Bind ViewModel.CpuMetric.Sparkline, Mode=OneWay}" />
+                            <TextBlock
+                                Grid.Row="2"
+                                FontSize="11"
+                                Foreground="{StaticResource WintixTextMutedBrush}"
+                                Text="{x:Bind ViewModel.CpuMetric.DetailText, Mode=OneWay}" />
+                        </Grid>
+                    </Border>
+
+                    <!-- RAM usage panel -->
+                    <Border Grid.Row="0" Grid.Column="1" Style="{StaticResource WintixUsageDetailPanelStyle}">
+                        <Grid RowSpacing="12">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Grid ColumnSpacing="8">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Spacing="2">
+                                    <TextBlock FontSize="12" Foreground="{StaticResource WintixTextMutedBrush}" Text="{x:Bind ViewModel.RamMetric.Name, Mode=OneWay}" />
+                                    <TextBlock FontSize="13" Foreground="{StaticResource WintixTextSecondaryBrush}" Text="{x:Bind ViewModel.RamMetric.Description, Mode=OneWay}" />
+                                </StackPanel>
+                                <TextBlock
+                                    Grid.Column="1"
+                                    VerticalAlignment="Center"
+                                    FontSize="22"
+                                    FontWeight="SemiBold"
+                                    Text="{x:Bind ViewModel.RamMetric.Value, Mode=OneWay}" />
+                            </Grid>
+                            <controls:SparklineChart
+                                Grid.Row="1"
+                                Height="48"
+                                AccentColorHex="{x:Bind ViewModel.RamMetric.AccentColorHex, Mode=OneWay}"
+                                Values="{x:Bind ViewModel.RamMetric.Sparkline, Mode=OneWay}" />
+                            <TextBlock
+                                Grid.Row="2"
+                                FontSize="11"
+                                Foreground="{StaticResource WintixTextMutedBrush}"
+                                Text="{x:Bind ViewModel.RamMetric.DetailText, Mode=OneWay}" />
+                        </Grid>
+                    </Border>
+
+                    <!-- Disk storage breakdown -->
+                    <Border Grid.Row="1" Grid.Column="0" Style="{StaticResource WintixUsageDetailPanelStyle}">
+                        <Grid RowSpacing="12">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <StackPanel Spacing="2">
+                                <TextBlock FontSize="12" Foreground="{StaticResource WintixTextMutedBrush}" Text="{x:Bind ViewModel.DiskMetric.Name, Mode=OneWay}" />
+                                <TextBlock FontSize="13" Foreground="{StaticResource WintixTextSecondaryBrush}" Text="{x:Bind ViewModel.DiskMetric.Description, Mode=OneWay}" />
+                            </StackPanel>
+                            <Grid Grid.Row="1" ColumnSpacing="8">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <ProgressBar
+                                    Maximum="100"
+                                    Value="{x:Bind ViewModel.DiskMetric.Percentage, Mode=OneWay}"
+                                    Height="8"
+                                    Background="#1E293B"
+                                    BorderThickness="0"
+                                    Foreground="{StaticResource WintixWarningBrush}" />
+                                <TextBlock
+                                    Grid.Column="1"
+                                    VerticalAlignment="Center"
+                                    FontSize="14"
+                                    FontWeight="SemiBold"
+                                    Text="{x:Bind ViewModel.DiskMetric.Value, Mode=OneWay}" />
+                            </Grid>
+                            <Grid Grid.Row="2" ColumnSpacing="16">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Spacing="2">
+                                    <TextBlock FontSize="10" Foreground="{StaticResource WintixTextMutedBrush}" Text="{x:Bind ViewModel.StorageUsedLabel, Mode=OneWay}" />
+                                    <TextBlock FontSize="12" Text="{x:Bind ViewModel.DiskUsedText, Mode=OneWay}" />
+                                </StackPanel>
+                                <StackPanel Grid.Column="1" Spacing="2">
+                                    <TextBlock FontSize="10" Foreground="{StaticResource WintixTextMutedBrush}" Text="{x:Bind ViewModel.StorageFreeLabel, Mode=OneWay}" />
+                                    <TextBlock FontSize="12" Text="{x:Bind ViewModel.DiskFreeText, Mode=OneWay}" />
+                                </StackPanel>
+                            </Grid>
+                        </Grid>
+                    </Border>
+
+                    <!-- Network panel -->
+                    <Border Grid.Row="1" Grid.Column="1" Style="{StaticResource WintixUsageDetailPanelStyle}">
+                        <Grid RowSpacing="12">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <StackPanel Spacing="2">
+                                <TextBlock FontSize="12" Foreground="{StaticResource WintixTextMutedBrush}" Text="{x:Bind ViewModel.NetworkMetric.Name, Mode=OneWay}" />
+                                <TextBlock FontSize="13" Foreground="{StaticResource WintixTextSecondaryBrush}" Text="{x:Bind ViewModel.NetworkMetric.Description, Mode=OneWay}" />
+                            </StackPanel>
+                            <Grid Grid.Row="1" ColumnSpacing="20">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Spacing="4">
+                                    <TextBlock FontSize="10" Foreground="{StaticResource WintixTextMutedBrush}" Text="{x:Bind ViewModel.DownloadLabel, Mode=OneWay}" />
+                                    <TextBlock
+                                        FontSize="18"
+                                        FontWeight="SemiBold"
+                                        Foreground="{StaticResource WintixAccentBrush}"
+                                        Text="{x:Bind ViewModel.NetworkMetric.DownloadText, Mode=OneWay}" />
+                                </StackPanel>
+                                <StackPanel Grid.Column="1" Spacing="4">
+                                    <TextBlock FontSize="10" Foreground="{StaticResource WintixTextMutedBrush}" Text="{x:Bind ViewModel.UploadLabel, Mode=OneWay}" />
+                                    <TextBlock
+                                        FontSize="18"
+                                        FontWeight="SemiBold"
+                                        Foreground="{StaticResource WintixSuccessBrush}"
+                                        Text="{x:Bind ViewModel.NetworkMetric.UploadText, Mode=OneWay}" />
+                                </StackPanel>
+                            </Grid>
+                            <controls:SparklineChart
+                                Grid.Row="2"
+                                Height="36"
+                                AccentColorHex="{x:Bind ViewModel.NetworkMetric.AccentColorHex, Mode=OneWay}"
+                                Values="{x:Bind ViewModel.NetworkMetric.Sparkline, Mode=OneWay}" />
+                        </Grid>
+                    </Border>
+                </Grid>
+            </StackPanel>
+
+            <!-- Recommended Actions -->
+            <StackPanel Grid.Row="3" Spacing="12">
+                <TextBlock FontSize="15" FontWeight="SemiBold" Text="{x:Bind ViewModel.RecommendedActionsTitle, Mode=OneWay}" />
+                <ItemsRepeater x:Name="ActionsRepeater" ItemsSource="{x:Bind ViewModel.RecommendedActions, Mode=OneWay}">
+                    <ItemsRepeater.Layout>
+                        <UniformGridLayout MinColumnSpacing="12" MinItemWidth="260" MinRowSpacing="12" Orientation="Horizontal" />
+                    </ItemsRepeater.Layout>
+                    <ItemsRepeater.ItemTemplate>
+                        <DataTemplate x:DataType="models:RecommendedAction">
+                            <controls:RecommendedActionCard
+                                AccentColorHex="{x:Bind AccentColorHex}"
+                                ActionText="{x:Bind ActionLabel}"
+                                Description="{x:Bind Description}"
+                                IconGlyph="{x:Bind IconGlyph}"
+                                Title="{x:Bind Title}"
+                                Value="{x:Bind Value}" />
+                        </DataTemplate>
+                    </ItemsRepeater.ItemTemplate>
+                </ItemsRepeater>
+            </StackPanel>
+
+            <!-- System Components -->
+            <StackPanel Grid.Row="4" Spacing="12">
+                <TextBlock FontSize="15" FontWeight="SemiBold" Text="{x:Bind ViewModel.ComponentsTitle, Mode=OneWay}" />
+                <ItemsRepeater ItemsSource="{x:Bind ViewModel.Components, Mode=OneWay}">
+                    <ItemsRepeater.Layout>
+                        <UniformGridLayout MinColumnSpacing="12" MinItemWidth="240" MinRowSpacing="12" Orientation="Horizontal" />
+                    </ItemsRepeater.Layout>
+                    <ItemsRepeater.ItemTemplate>
+                        <DataTemplate x:DataType="models:SystemComponent">
+                            <controls:ComponentDetailCard
+                                Category="{x:Bind Category}"
+                                Detail="{x:Bind Detail}"
+                                IconGlyph="{x:Bind IconGlyph}"
+                                SpecLine="{x:Bind SpecLine}"
+                                StatusColorHex="{x:Bind StatusColorHex}"
+                                StatusText="{x:Bind StatusText}"
+                                Title="{x:Bind Name}" />
+                        </DataTemplate>
+                    </ItemsRepeater.ItemTemplate>
+                </ItemsRepeater>
+            </StackPanel>
+
+            <ProgressRing
+                Grid.Row="5"
+                Width="32"
+                Height="32"
+                HorizontalAlignment="Left"
+                IsActive="{x:Bind ViewModel.IsLoading, Mode=OneWay}"
+                Visibility="{x:Bind ViewModel.IsLoading, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+        </Grid>
+    </ScrollViewer>
+</Page>
